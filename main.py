@@ -73,8 +73,8 @@ def get_conversational_chain():
 
 # Define paths of the PDF files
 PDF_PATHS = [
-    "C:/Users/HP/Desktop/banque_AR.pdf",
-    "C:/Users/HP/Desktop/Banque_FR.pdf"
+    "banque_AR.pdf",
+    "Banque_FR.pdf"
 ]
 
 def main():
