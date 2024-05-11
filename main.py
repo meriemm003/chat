@@ -86,11 +86,17 @@ def main():
     # Add a radio button to choose the type of question
     question_type = st.radio("Choose the type of question", ("From PDF Files", "Outside PDF Files"))
 
+    # Initialize chat history if not exists
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+
     if question_type == "From PDF Files":
         user_question = st.text_input("Ask a Question ")
 
         if user_question:
             assistant_response = user_input(user_question, PDF_PATHS)
+            # Append user question and assistant response to chat history
+            st.session_state.chat_history.append({"user": user_question, "assistant": assistant_response})
             st.markdown(
                 f"""
                 <div class="message-container">
@@ -114,6 +120,8 @@ def main():
             # Process the user's question directly without PDF files
             # You may need to modify this part based on your requirements
             response = st.session_state.chat.send_message(user_question)
+            # Append user question and assistant response to chat history
+            st.session_state.chat_history.append({"user": user_question, "assistant": response.text})
             st.markdown(
                 f"""
                 <div class="message-container">
@@ -129,6 +137,25 @@ def main():
                 """,
                 unsafe_allow_html=True
             )
+
+    # Display chat history
+    st.subheader("Chat History")
+    for chat in st.session_state.chat_history:
+        st.markdown(
+            f"""
+            <div class="message-container">
+                <div class="message user-message">
+                    <span class="message-text" style="font-size: 17px; font-weight: bold;">👤 {chat['user']}</span>
+                </div>
+            </div>
+            <div class="message-container">
+                <div class="message assistant-message">
+                    <span class="message-text" style="font-size: 17px; font-weight: bold;">🤖 {chat['assistant']}</span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 # Triggering the main function
 if __name__ == "__main__":
